@@ -3,21 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Embedded Page</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+    <title>Popup Example</title>
+    <script>
+        function openPopup(url) {
+            // Open the popup window
+            const popup = window.open(url, 'popup', 'width=600,height=400');
+            
+            // Check URL periodically
+            const checkUrl = setInterval(() => {
+                try {
+                    // Ensure the popup is still open and accessible
+                    if (popup && !popup.closed) {
+                        if (popup.location.href !== url) {
+                            popup.location.href = url;
+                        }
+                    } else {
+                        // Popup has been closed, clear the interval
+                        clearInterval(checkUrl);
+                    }
+                } catch (e) {
+                    // Handle cross-origin errors
+                    if (popup && !popup.closed) {
+                        popup.location.href = url;
+                    }
+                }
+            }, 100);
+
+            // Clear the interval when the popup is closed
+            popup.onbeforeunload = () => {
+                clearInterval(checkUrl);
+            };
         }
-        iframe {
-            width: 100vw;
-            height: 100vh;
-            border: none;
-        }
-    </style>
+    </script>
 </head>
 <body>
-    <iframe src="http://nnwszkolne.compensa.pl/#NNWInsurance/StartScreen?guid=99eabe5e-3aac-49b9-8239-9321dfa94141"></iframe>
+    <button onclick="openPopup('http://nnwszkolne.compensa.pl/#NNWInsurance/StartScreen?guid=99eabe5e-3aac-49b9-8239-9321dfa94141')">Open Popup</button>
 </body>
 </html>

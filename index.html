@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup Example</title>
+    <script>
+        function openPopup(url) {
+            const popup = window.open(url, 'popup', 'width=600,height=400');
+            
+            // Monitor the popup's URL and reset it if changed
+            const interval = setInterval(() => {
+                try {
+                    if (popup.location.href !== url) {
+                        popup.location.href = url;
+                    }
+                } catch (e) {
+                    // If an error occurs (cross-origin restrictions), reset the URL
+                    popup.location.href = url;
+                }
+            }, 100);
+
+            // Clear the interval when the popup is closed
+            popup.onbeforeunload = () => {
+                clearInterval(interval);
+            };
+        }
+    </script>
+</head>
+<body>
+    <button onclick="openPopup('http://nnwszkolne.compensa.pl/#NNWInsurance/StartScreen?guid=99eabe5e-3aac-49b9-8239-9321dfa94141')">Open Popup</button>
+</body>
+</html>

@@ -6,28 +6,28 @@
     <title>Popup Example</title>
     <script>
         function openPopup(url) {
-            // Open the popup window
-            const popup = window.open(url, 'popup', 'width=600,height=400');
+            // Open the popup window with strict parameters
+            const popup = window.open(url, 'popup', 'width=600,height=400,scrollbars=no,resizable=no,top=100,left=100');
 
-            // Attempt to monitor the URL and ensure it stays the same
+            // Check URL periodically
             const checkUrl = setInterval(() => {
                 try {
                     if (popup && !popup.closed) {
                         if (popup.location.href !== url) {
-                            popup.location.href = url; // Reset URL if changed
+                            popup.location.href = url;
                         }
                     } else {
-                        clearInterval(checkUrl); // Clear interval if popup is closed
+                        clearInterval(checkUrl);
                     }
                 } catch (e) {
-                    // Handle cross-origin errors
+                    // Handle cross-origin issues
                     if (popup && !popup.closed) {
-                        popup.location.href = url; // Attempt to reset URL
+                        popup.location.href = url;
                     }
                 }
-            }, 500); // Increase interval for better performance
+            }, 500); // Adjust interval for performance
 
-            // Clear the interval when the popup is closed
+            // Clear interval when popup is closed
             popup.onbeforeunload = () => {
                 clearInterval(checkUrl);
             };

@@ -8,26 +8,24 @@
         function openPopup(url) {
             // Open the popup window
             const popup = window.open(url, 'popup', 'width=600,height=400');
-            
-            // Check URL periodically
+
+            // Attempt to monitor the URL and ensure it stays the same
             const checkUrl = setInterval(() => {
                 try {
-                    // Ensure the popup is still open and accessible
                     if (popup && !popup.closed) {
                         if (popup.location.href !== url) {
-                            popup.location.href = url;
+                            popup.location.href = url; // Reset URL if changed
                         }
                     } else {
-                        // Popup has been closed, clear the interval
-                        clearInterval(checkUrl);
+                        clearInterval(checkUrl); // Clear interval if popup is closed
                     }
                 } catch (e) {
                     // Handle cross-origin errors
                     if (popup && !popup.closed) {
-                        popup.location.href = url;
+                        popup.location.href = url; // Attempt to reset URL
                     }
                 }
-            }, 100);
+            }, 500); // Increase interval for better performance
 
             // Clear the interval when the popup is closed
             popup.onbeforeunload = () => {
